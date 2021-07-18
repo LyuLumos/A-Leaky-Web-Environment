@@ -1,3 +1,4 @@
+import sqlite3
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
@@ -55,45 +56,72 @@ carts = []
 
 @app.route('/')
 def index():
-    product = Product.query.all()
-    category = Category.query.all()
-    # print(product, category)
-    return render_template('index.html', product=product, category=category)
+    return render_template('login.html')
 
-# 丢失界面
+@app.route('/index2')
+def index2():
+    if 'login_ok' in session:
+        if(session['login_ok'] == True):
+            product = Product.query.all()
+            category = Category.query.all()
+            return render_template('index2.html', product=product, category=category)
+        else:
+            return redirect(url_for('index'))
+
+
 @app.route('/lost')
 def lost():
     return render_template('lost.html')
 
-# 登录
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'GET':
+#         if 'login_ok' in session:
+#             if session['login_ok'] == True:
+#                 return redirect(url_for('index'))
+#             else:
+#                 return render_template('login.html')
+#         else:
+#             session['login_ok'] = False
+#             return redirect(url_for('login'))
+#     else:
+#         email = request.form['email']
+#         passwd = request.form['pass']
+#         sifrelenmis = hashlib.sha256(passwd.encode("utf8")).hexdigest()
+#         if User.query.filter_by(email=email, passwd=sifrelenmis).first():
+#             veri = User.query.filter_by(
+#                 email=email, passwd=sifrelenmis).first()
+#             session['login_ok'] = True
+#             session['isim'] = veri.name
+#             session['id'] = veri.id
+#             session['auth'] = veri.auth
+#             session['sepet'] = carts
+#             return redirect(url_for('index'))
+#         else:
+#             return redirect(url_for('login'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        if 'login_ok' in session:
-            if session['login_ok'] == True:
-                return redirect(url_for('index'))
-            else:
-                return render_template('login.html')
-        else:
-            session['login_ok'] = False
-            return redirect(url_for('login'))
-    else:
-        email = request.form['email']
-        passwd = request.form['pass']
-        sifrelenmis = hashlib.sha256(passwd.encode("utf8")).hexdigest()
-
-        print(sifrelenmis)
-        if User.query.filter_by(email=email, passwd=sifrelenmis).first():
-            veri = User.query.filter_by(
-                email=email, passwd=sifrelenmis).first()
+    with sqlite3.connect('database.db') as conn:
+        em = request.args.get('Email')
+        pas = request.args.get('psw')
+        pas = hashlib.sha256(str(pas).encode("utf-8")).hexdigest()
+        print(em, pas)
+        cur = conn.cursor()
+        cur.execute("select * from user where email='{email}' and passwd= '{passwd}'"
+                    .format(email=em, passwd=pas))
+        ans = cur.fetchall()
+        if len(ans)==1:
             session['login_ok'] = True
-            session['isim'] = veri.name
-            session['id'] = veri.id
-            session['auth'] = veri.auth
+            session['isim'] = ans[0][1]
+            session['id'] = ans[0][0]
+            session['auth'] = ans[0][4]
             session['sepet'] = carts
-            return redirect(url_for('index'))
+            return redirect(url_for('index2'))
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
 
 
 @app.route('/logout')
@@ -132,7 +160,6 @@ def findback():
             return redirect(url_for('index'))
         except:
             return redirect(url_for('findback'))
-
 
 
 @app.route('/cart')
@@ -273,7 +300,7 @@ def buy():
                 perprice = urun["perprice"]
                 sumprice = urun["sumprice"]
                 histo = History(user_id=kid, product_id=product_id,
-                                  num=num, time=timestamp, perprice=perprice, sumprice=sumprice)
+                                num=num, time=timestamp, perprice=perprice, sumprice=sumprice)
                 db.session.add(histo)
                 db.session.commit()
             carts.clear()
@@ -294,7 +321,8 @@ def histo():
             siparisverilen = History.query.filter_by(user_id=user_id)
             veri = []
             for itemi in siparisverilen:
-                uruncagir = Product.query.filter_by(id=itemi.product_id).first()
+                uruncagir = Product.query.filter_by(
+                    id=itemi.product_id).first()
                 siparislerim = {
                     'name': str(uruncagir.name),
                     'perprice': itemi.perprice,

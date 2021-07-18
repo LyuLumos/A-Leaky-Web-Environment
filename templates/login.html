@@ -1,91 +1,59 @@
-{% extends "layout.html" %}
-{% block baslik %}
-登录 - Diagon Alley
-{% endblock baslik %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Welcome to DiagonAlley:)</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                background-image: url(../static/images/bg-0x01.jpg);
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+            }
+        </style>
+    </head>
 
+    <body>
+        <div class="btncontainer">
+            <button onclick="document.getElementById('id01').style.display='block'" class="startbtn start"><b>TAB TO START</b></button>
+        </div>
 
-{% block stil %}
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='vendor/bootstrap/css/bootstrap.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='fonts/Linearicons-Free-v1.0.0/icon-font.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='vendor/animate/animate.css') }}">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='vendor/css-hamburgers/hamburgers.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='vendor/animsition/css/animsition.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='vendor/select2/select2.min.css') }}">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='vendor/daterangepicker/daterangepicker.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/util.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/main.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main_styles.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/responsive.css') }}">
-<!--===============================================================================================-->
-{% endblock stil %}
+        <div id="id01" class="modal">
 
-{% block icerik%}
-	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100" style="margin-top:100px;">
-				<div class="login100-form-title" style="background-image: url({{ url_for('static',filename='images/bg-01.jpg') }});">
-					<span class="login100-form-title-1">
-						登录
-					</span>
-				</div>
+            <form class="modal-content animate" action="/login" method="get">
+                <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="../static/images/wizard.png" alt="Avatar" class="avatar">
+                </div>
 
-				<form action="/login" method="POST" class="login100-form validate-form">
-					<div class="wrap-input100 validate-input m-b-26" data-validate="Email invalid">
-						<span class="label-input100">Email</span>
-						<input class="input100" type="text" name="email" placeholder="电子邮件地址">
-						<span class="focus-input100"></span>
-					</div>
+                <div class="container">
+                    <label for="uname"><b>Email</b></label>
+                    <input type="text" placeholder="Email" name="Email" required>
 
-					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
-						<span class="label-input100">password</span>
-						<input class="input100" type="password" name="pass" placeholder="密码">
-						<span class="focus-input100"></span>
-					</div>
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="psw" required>
+                        
+                    <button type="submit">Login</button>
+                    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                    </label>
+                </div>
+            </form>
+        </div>
 
-					<div class="flex-sb-m w-full p-b-30">
-						<div>
-							<a href="/findback" class="txt1">
-								忘记密码？ 找回
-							</a>
-						</div>
-					</div>
+        <script>
+        // Get the modal
+        var modal = document.getElementById('id01');
 
-					<div class="container-login100-form-btn">
-						<button type="submit" class="login100-form-btn">
-							登录
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-
-{% endblock icerik%}
-
-{% block script %}
-	<script src="{{ url_for('static',filename='vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ url_for('static',filename='vendor/animsition/js/animsition.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ url_for('static',filename='vendor/bootstrap/js/popper.js') }}"></script>
-	<script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ url_for('static',filename='vendor/select2/select2.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ url_for('static',filename='vendor/daterangepicker/moment.min.js') }}"></script>
-	<script src="{{ url_for('static',filename='vendor/daterangepicker/daterangepicker.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ url_for('static',filename='vendor/countdowntime/countdowntime.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ url_for('static',filename='js/main.js') }}"></script>
-{% endblock script %}
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        </script>
+    </body>
+</html>

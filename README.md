@@ -20,3 +20,7 @@
 ## Gantt Chart
 
 ![WorkOuts](img/gantt-chart.png)
+
+## Database E-R
+
+![ER](img/DatabaseER.png)
