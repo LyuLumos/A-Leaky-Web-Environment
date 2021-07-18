@@ -1,5 +1,4 @@
-# A-Leaky-Web-Environment
-求一个仓库名ᓚᘏᗢ
+# ![DIagonAlley-Logo](img/logo.png) DiagonAlley
 
 ## Rules
 
@@ -17,3 +16,7 @@
   - [ ] 人员分工说明
 - [ ] 其他
   - [ ] EXP
+
+## Gantt Chart
+
+![WorkOuts](img/gantt-chart.png)
