@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/navigator.css">
+        <!-- Additional style -->
+        {% block style %}
+
+        {% endblock style %}
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
+    </head>
+
+    <body>
+    <div class="topnav" id="myTopnav">
+        <img src="../static/images/logo.png" style="zoom:60%;">
+        <a href="#home"><i class="fa fa-fw fa-home"></i> Home</a>
+        <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-user-circle-o"></i> User</button>
+            <div class="dropdown-content">
+            <a href="#"><i class="fa fa-info-circle" aria-hidden="true"></i> Account</a>
+            <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping Cart</a>
+            <a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+            </div>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        </a>
+    </div>
+
+    <!-- Additional content -->
+    {% block content %}
+
+	{% endblock content %}
+
+    <script>
+    function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
+    </script>
+
+    </body>
+</html>
