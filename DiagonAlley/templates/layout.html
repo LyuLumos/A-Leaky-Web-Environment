@@ -1,52 +1,142 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../static/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/navigator.css">
-        <!-- Additional style -->
-        {% block style %}
+<html lang="tr">
+<head>
+<title>{% block baslik %}{% endblock baslik %}</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Diagon Alley">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap-4.1.2/bootstrap.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/styles_samet.css') }}">
+<link href="{{ url_for('static',filename='plugins/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='plugins/OwlCarousel2-2.2.1/owl.carousel.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='plugins/OwlCarousel2-2.2.1/owl.theme.default.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='plugins/OwlCarousel2-2.2.1/animate.css') }}">
+{% block stil %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main_styles.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/responsive.css') }}">
+{% endblock stil %}
 
-        {% endblock style %}
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, Helvetica, sans-serif;
-            }
-        </style>
-    </head>
+</head>
+<body>
 
-    <body>
-    <div class="topnav" id="myTopnav">
-        <img src="../static/images/logo.png" style="zoom:60%;">
-        <a href="#home"><i class="fa fa-fw fa-home"></i> Home</a>
-        <div class="dropdown">
-            <button class="dropbtn"><i class="fa fa-user-circle-o"></i> User</button>
-            <div class="dropdown-content">
-            <a href="#"><i class="fa fa-info-circle" aria-hidden="true"></i> Account</a>
-            <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping Cart</a>
-            <a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
-            </div>
-        </div>
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-        </a>
-    </div>
+<!-- Menu -->
 
-    <!-- Additional content -->
-    {% block content %}
+<div class="menu">
+	<!-- Navigation -->
+	<div class="menu_nav">
+		<ul>
+		{% for yaz in category %}
+			<li><a href="/catege/{{yaz.id}}">{{yaz.name}}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+</div>
 
-	{% endblock content %}
+<div class="super_container">
 
-    <script>
-    function myFunction() {
-        var x = document.getElementById("myTopnav");
-        if (x.className === "topnav") {
-            x.className += " responsive";
-        } else {
-            x.className = "topnav";
-        }
-    }
-    </script>
+	<!-- Header -->
 
-    </body>
+	<header class="header">
+		<div class="header_overlay"></div>
+		<div class="header_content d-flex flex-row align-items-center justify-content-start container">
+			<div class="logo">
+				<a href="{{url_for('index')}}">
+					<div class="d-flex flex-row align-items-center justify-content-start">
+						<div><img src="{{ url_for('static',filename='images/logo_1.png') }}" alt=""></div>
+					</div>
+				</a>	
+			</div>
+			<div class="hamburger"><i class="fa fa-bars" aria-hidden="true"></i></div>
+
+			<div class="d-flex flex-row align-items-center justify-content-start ml-auto">
+				<div class="admin">
+					<ul>
+					{% if session['login_ok'] %}
+						<li><a href="/logout">退出登录</a></li>
+						{% if session['auth']==1 %}
+						<li><a href="/finalpro">抢购商品</a></li>
+						{%endif%}
+						<li><a href="/histo">历史订单</a></li>
+						<li>{{session["isim"]}}</li>
+					{% else %}
+						<li><a href="/login">登录</a></li>
+						<li><a href="/findback">注册</a></li>
+					{% endif %}
+					</ul>
+				</div>
+					<div class="user"><a><div><img src="{{ url_for('static',filename='images/user.svg') }}" alt=""></div></a></div>
+				
+				<!-- cart -->
+				<div class="cart"><a href="/cart"><div><img class="svg" src="{{ url_for('static',filename='images/cart.svg') }}" alt=""></div></a></div>
+			</div>
+		</div>
+	</header>
+
+	<div class="super_container_inner">
+
+		<!-- icerik -->
+		{% block icerik %}
+		
+		{% endblock icerik %}
+		
+		<!-- Footer -->
+
+		<footer class="footer">
+			<div class="container">
+				<div class="footer_content">
+					<div class="container">
+						<div class="row">
+							
+							<!-- About -->
+							<div class="col-md-12 footer_col">
+								<div class="footer_about">
+									<div class="footer_logo">
+										<a href="{{url_for('index')}}">
+											<div class="d-flex flex-row align-items-center justify-content-start">
+												<div class="footer_logo_icon"><img src="{{ url_for('static',filename='images/logo_2.png') }}" alt=""></div>
+												<div>Diagon Alley</div>
+											</div>
+										</a>		
+									</div>
+									<div class="footer_about_text">
+										<p>This is a hint.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer_bar">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="footer_bar_content d-flex flex-md-row flex-column align-items-center justify-content-start">
+							</div> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+		
+</div>
+
+<script src="{{ url_for('static',filename='js/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ url_for('static',filename='styles/bootstrap-4.1.2/popper.js') }}"></script>
+<script src="{{ url_for('static',filename='styles/bootstrap-4.1.2/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/greensock/TweenMax.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/greensock/TimelineMax.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/scrollmagic/ScrollMagic.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/greensock/animation.gsap.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/greensock/ScrollToPlugin.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/OwlCarousel2-2.2.1/owl.carousel.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/easing/easing.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/progressbar/progressbar.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/parallax-js-master/parallax.min.js') }}"></script>
+{% block script %}
+
+{% endblock script %}
+</body>
 </html>
