@@ -53,6 +53,12 @@ product = Product.query.all()
 category = Category.query.all()
 carts = []
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('lost.html'),404
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('lost.html'),500
 
 @app.route('/')
 def index():
@@ -84,7 +90,7 @@ def lost():
 #                 return render_template('login.html')
 #         else:
 #             session['login_ok'] = False
-#             return redirect(url_for('login'))
+#             return redirect(url_for('index'))
 #     else:
 #         email = request.form['email']
 #         passwd = request.form['pass']
@@ -99,21 +105,26 @@ def lost():
 #             session['sepet'] = carts
 #             return redirect(url_for('index'))
 #         else:
-#             return redirect(url_for('login'))
+#             return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # 正常登录
+    # http://127.0.0.1:5000/login?Email=%271@1.com%27&psw=1
+    # sqlite 注入
+    # http://127.0.0.1:5000/login?Email=1%20or%201=1%20or%201=1
     with sqlite3.connect('database.db') as conn:
         em = request.args.get('Email')
         pas = request.args.get('psw')
+        print("pas="+str(pas))
         pas = hashlib.sha256(str(pas).encode("utf-8")).hexdigest()
         print(em, pas)
         cur = conn.cursor()
-        cur.execute("select * from user where email='{email}' and passwd= '{passwd}'"
+        cur.execute("select * from user where email={email} and passwd= '{passwd}'"
                     .format(email=em, passwd=pas))
         ans = cur.fetchall()
-        if len(ans)==1:
+        if len(ans):
             session['login_ok'] = True
             session['isim'] = ans[0][1]
             session['id'] = ans[0][0]
@@ -136,30 +147,30 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/findback', methods=['GET', 'POST'])
-def findback():
-    if request.method == 'GET':
-        if 'login_ok' in session:
-            if session['login_ok'] == True:
-                return redirect(url_for('index'))
-            else:
-                return render_template('findback.html')
-        else:
-            session['login_ok'] = False
-            return render_template('findback.html')
-    else:
-        try:
-            isim = request.form['username']
-            email = request.form['email']
-            passwd = request.form['pass']
-            sifrelenmis = hashlib.sha256(passwd.encode("utf8")).hexdigest()
-            kullanıcı = User(name=isim, passwd=sifrelenmis,
-                             email=email, auth='0')
-            db.session.add(kullanıcı)
-            db.session.commit()
-            return redirect(url_for('index'))
-        except:
-            return redirect(url_for('findback'))
+# @app.route('/findback', methods=['GET', 'POST'])
+# def findback():
+#     if request.method == 'GET':
+#         if 'login_ok' in session:
+#             if session['login_ok'] == True:
+#                 return redirect(url_for('index'))
+#             else:
+#                 return render_template('findback.html')
+#         else:
+#             session['login_ok'] = False
+#             return render_template('findback.html')
+#     else:
+#         try:
+#             isim = request.form['username']
+#             email = request.form['email']
+#             passwd = request.form['pass']
+#             sifrelenmis = hashlib.sha256(passwd.encode("utf8")).hexdigest()
+#             produ = User(name=isim, passwd=sifrelenmis,
+#                              email=email, auth='0')
+#             db.session.add(produ)
+#             db.session.commit()
+#             return redirect(url_for('index'))
+#         except:
+#             return redirect(url_for('findback'))
 
 
 @app.route('/cart')
@@ -173,7 +184,7 @@ def cart():
             return render_template('login.html')
     else:
         session['login_ok'] = False
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 @app.route('/addcart/<urunid>')
@@ -232,10 +243,10 @@ def addcart(urunid):
             session["sepet"] = carts
             return redirect(url_for('cart'))
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
     else:
         session['login_ok'] = False
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 @app.route('/delete/<urunid>')
@@ -251,10 +262,10 @@ def delete(urunid):
             session["sepet"] = carts
             return render_template('cart.html', sepetteki=session["sepet"])
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
     else:
         session['login_ok'] = False
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 @app.route('/clearall', methods=['GET'])
@@ -265,10 +276,10 @@ def clearall():
             session["sepet"] = carts
             return redirect(url_for('cart'))
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
     else:
         session['login_ok'] = False
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 @app.route('/product/<urunid>')
@@ -279,7 +290,7 @@ def urun(urunid):
         category = Category.query.all()
         return render_template('product.html', urundetay=urundetay, categories=categories, category=category)
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 @app.route('/buy')
@@ -307,10 +318,10 @@ def buy():
             session["sepet"] = carts
             return redirect(url_for('cart'))
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
     else:
         session['login_ok'] = False
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 @app.route('/histo')
@@ -334,17 +345,46 @@ def histo():
                 veri.append(siparislerim)
             return render_template('history.html', history=veri, category=category)
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
     else:
         session['login_ok'] = False
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 
 @app.route('/catege/<cateid>')
 def catege(cateid):
     veri = Product.query.filter_by(cateid=cateid).order_by(desc(Product.sold))
     category = Category.query.all()
-    return render_template('index.html', category=category, product=veri)
+    return render_template('index2.html', category=category, product=veri)
+
+@app.route('/finalpro')
+def finp():
+    if 'login_ok' in session:
+        if(session['login_ok'] == True):
+            return render_template('final.html')
+        else:
+            return redirect(url_for('index'))
+    else:
+        session['login_ok'] = False
+        return redirect(url_for('index'))
+            
+
+@app.route('/finalbuy', methods=['GET', 'POST'])
+def fin():
+    if 'login_ok' in session:
+        if(session['login_ok'] == True):
+            if request.method == 'POST' or request.method == 'GET':
+                ans = request.args.get('Time')
+                if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
+                    return render_template('lost.html')
+                else:
+                    return render_template('flag.html')
+
+        else:
+            return redirect(url_for('index'))
+    else:
+        session['login_ok'] = False
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

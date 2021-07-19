@@ -54,9 +54,9 @@
 					<ul>
 					{% if session['login_ok'] %}
 						<li><a href="/logout">退出登录</a></li>
-						<!-- {% if session['auth']==1 %}
-						<li><a href="/addnew">添加商品</a></li>
-						{%endif%} -->
+						{% if session['auth']==1 %}
+						<li><a href="/finalbuy">抢购商品</a></li>
+						{%endif%}
 						<li><a href="/histo">历史订单</a></li>
 						<li>{{session["isim"]}}</li>
 					{% else %}
