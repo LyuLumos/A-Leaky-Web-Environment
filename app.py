@@ -1,14 +1,22 @@
 import sqlite3
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session # Fix
 from sqlalchemy import desc
 import hashlib
 import time
+
+
 app = Flask(__name__)
-app.secret_key = 'samet'
+app.config['SECRET_KEY'] = 'TH15_15_N0T_F14G!'
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Session(app)
+
 db = SQLAlchemy(app)
+
 
 
 class User(db.Model):
@@ -71,13 +79,16 @@ def index2():
             product = Product.query.all()
             category = Category.query.all()
             return render_template('index2.html', product=product, category=category)
-        else:
-            return redirect(url_for('index'))
+    return redirect(url_for('index'))
+    
 
 
 @app.route('/lost')
 def lost():
-    return render_template('lost.html')
+    if 'login_ok' in session:
+        if(session['login_ok'] == True):
+            return render_template('lost.html')
+    return redirect(url_for('index'))
 
 
 # @app.route('/login', methods=['GET', 'POST'])
@@ -374,12 +385,12 @@ def fin():
     if 'login_ok' in session:
         if(session['login_ok'] == True):
             if request.method == 'POST' or request.method == 'GET':
-                ans = request.args.get('Time')
+                ans = request.args.get('Time') if request.args.get('Time') else "0"
+                # print("ans = "+ ans)
                 if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
                     return render_template('lost.html')
                 else:
                     return render_template('flag.html')
-
         else:
             return redirect(url_for('index'))
     else:
