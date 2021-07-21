@@ -18,7 +18,7 @@
 
 ## To-do list
 - [ ] 功能
-- [ ] 文档（[GitHub Wiki](https://github.com/LyuLumos/A-Leaky-Web-Environment/wiki)）
+- [ ] 文档
   - [ ] 需求分析、（概要和详细）设计文档
   - [ ] API 接口设计说明
   - [ ] 必要的插图或表格
@@ -42,6 +42,10 @@ flask run
 
 ![ER](DiagonAlley/img/DatabaseER.png)
 
+Database UML
+
+![UML类图](DiagonAlley/img/UML类图.png)
+
 ## EXP
 
 ```bash
@@ -50,4 +54,5 @@ pip install -r requirements.txt
 python3 exp.py
 ```
 
-![](DiagonAlley/img/exp.png)
+![](DiagonAlley/img/exp.png)+
+

@@ -50,7 +50,8 @@ string = tail[tail.find(bytes.fromhex('AE426082'))+4:]
 secret_key = base64.b32decode(string).decode('utf-8')
 secret_key = secret_key[secret_key.find("= ")+2:]
 print("secret_key 已获得："+secret_key)
-
+fileData.close()
+os.remove(pngname)
 
 # Encode session
 newsession = FSCM.encode(secret_key, newtext)
