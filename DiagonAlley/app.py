@@ -368,7 +368,7 @@ def catege(cateid):
     category = Category.query.all()
     return render_template('index2.html', category=category, product=veri)
 
-@app.route('/finalpro')
+@app.route('/finalpro', methods=['GET', 'POST'])
 def finp():
     if 'login_ok' in session:
         if(session['login_ok'] == True):
@@ -384,13 +384,12 @@ def finp():
 def fin():
     if 'login_ok' in session:
         if(session['login_ok'] == True):
-            if request.method == 'POST' or request.method == 'GET':
-                ans = request.args.get('Time') if request.args.get('Time') else "0"
-                # print("ans = "+ ans)
-                if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
-                    return render_template('lost.html')
-                else:
-                    return render_template('flag.html')
+            ans = request.args.get('Time') if request.args.get('Time') else "0"
+            # print("ans = "+ ans)
+            if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
+                return render_template('lost.html')
+            else:
+                return render_template('flag.html')
         else:
             return redirect(url_for('index'))
     else:
