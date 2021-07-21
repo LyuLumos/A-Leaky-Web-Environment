@@ -1,5 +1,14 @@
 # ![DIagonAlley-Logo](DiagonAlley/img/logo.png) DiagonAlley
 
+- [!DIagonAlley-Logo DiagonAlley](#-diagonalley)
+  - [Rules](#rules)
+  - [TBD](#tbd)
+  - [To-do list](#to-do-list)
+  - [Set up the Environment](#set-up-the-environment)
+  - [Gantt Chart](#gantt-chart)
+  - [Database E-R](#database-e-r)
+  - [EXP](#exp)
+
 ## Rules
 
 - [创新实践能力团队赛评分标准](https://c4pr1c3.github.io/cuc-wiki/cp/assessment.html)
@@ -15,7 +24,15 @@
   - [ ] 必要的插图或表格
   - [ ] 人员分工说明
 - [ ] 其他
-  - [ ] EXP
+  - [x] EXP
+  - [ ] Checker
+
+## Set up the Environment
+```bash
+cd DiagonAlley
+pip install -r requirements.txt
+flask run
+```
 
 ## Gantt Chart
 
@@ -24,3 +41,13 @@
 ## Database E-R
 
 ![ER](DiagonAlley/img/DatabaseER.png)
+
+## EXP
+
+```bash
+cd EXP
+pip install -r requirements.txt
+python3 exp.py
+```
+
+![](DiagonAlley/img/exp.png)
