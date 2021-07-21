@@ -1,4 +1,4 @@
-# ![DIagonAlley-Logo](img/logo.png) DiagonAlley
+# ![DIagonAlley-Logo](DiagonAlley/img/logo.png) DiagonAlley
 
 ## Rules
 
@@ -19,8 +19,8 @@
 
 ## Gantt Chart
 
-![WorkOuts](img/gantt-chart.png)
+![WorkOuts](DiagonAlley/img/gantt-chart.png)
 
 ## Database E-R
 
-![ER](img/DatabaseER.png)
+![ER](DiagonAlley/img/DatabaseER.png)

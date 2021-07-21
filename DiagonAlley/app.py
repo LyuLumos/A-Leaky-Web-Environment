@@ -128,9 +128,9 @@ def login():
     with sqlite3.connect('database.db') as conn:
         em = request.args.get('Email')
         pas = request.args.get('psw')
-        print("pas="+str(pas))
+        # print("pas="+str(pas))
         pas = hashlib.sha256(str(pas).encode("utf-8")).hexdigest()
-        print(em, pas)
+        # print(em, pas)
         cur = conn.cursor()
         cur.execute("select * from user where email={email} and passwd= '{passwd}'"
                     .format(email=em, passwd=pas))
@@ -399,4 +399,4 @@ def fin():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
