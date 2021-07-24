@@ -7,7 +7,7 @@
   - [Set up the Environment](#set-up-the-environment)
   - [Gantt Chart](#gantt-chart)
   - [Database E-R](#database-e-r)
-  - [EXP](#exp)
+  - [EXP & CHECKER](#exp--checker)
 
 ## Rules
 
@@ -46,13 +46,14 @@ Database UML
 
 ![UML类图](DiagonAlley/img/UML类图.png)
 
-## EXP
+## EXP & CHECKER
 
 ```bash
 cd EXP
 pip install -r requirements.txt
 python3 exp.py
+python3 cheker.py
 ```
 
-![](DiagonAlley/img/exp.png)+
+![](DiagonAlley/img/exp.png)
 

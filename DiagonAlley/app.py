@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_session import Session # Fix
+from flask_session import Session
 from sqlalchemy import desc
 import hashlib
 import time
@@ -13,7 +13,6 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Session(app)
 
 db = SQLAlchemy(app)
 
@@ -385,7 +384,7 @@ def fin():
     if 'login_ok' in session:
         if(session['login_ok'] == True):
             ans = request.args.get('Time') if request.args.get('Time') else "0"
-            # print("ans = "+ ans)
+            # ans = time.time()
             if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
                 return render_template('lost.html')
             else:
