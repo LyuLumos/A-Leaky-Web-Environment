@@ -5,7 +5,7 @@ from flask_session import Session
 from sqlalchemy import desc
 import hashlib
 import time
-
+from encdec import enc, dec
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'TH15_15_N0T_F14G!'
@@ -138,7 +138,7 @@ def login():
             session['login_ok'] = True
             session['isim'] = ans[0][1]
             session['id'] = ans[0][0]
-            session['auth'] = ans[0][4]
+            session['auth'] = enc(ans[0][4])
             session['sepet'] = carts
             return redirect(url_for('index2'))
         else:
@@ -371,7 +371,7 @@ def catege(cateid):
 def finp():
     if 'login_ok' in session:
         if(session['login_ok'] == True):
-            return render_template('final.html')
+            return render_template('final.html', curtime = time.time())
         else:
             return redirect(url_for('index'))
     else:
@@ -384,7 +384,6 @@ def fin():
     if 'login_ok' in session:
         if(session['login_ok'] == True):
             ans = request.args.get('Time') if request.args.get('Time') else "0"
-            # ans = time.time()
             if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
                 return render_template('lost.html')
             else:
