@@ -3,14 +3,15 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from Crypto.Util.Padding import unpad
 import os
-
+import string
+import random
 
 
 m = "1"
-key = os.urandom(16)
-iv =  os.urandom(16)
+key = ''.join(random.sample(string.ascii_letters + string.digits, 16))
+iv =  ''.join(random.sample(string.ascii_letters + string.digits, 16))
 
-
+key, iv = key.encode('utf-8'), iv.encode('utf-8')
 def enc(m):
     m=str(m)
     cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -24,5 +25,6 @@ def dec(c):
     return plaintext.decode('utf-8')
 
 # print(enc(m))
-# print(dec(enc(m)))
+# print(dec(enc(1)))
+# print(dec(enc("1")))
 # print(type(True), type(False))

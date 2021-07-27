@@ -90,34 +90,6 @@ def lost():
     return redirect(url_for('index'))
 
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'GET':
-#         if 'login_ok' in session:
-#             if session['login_ok'] == True:
-#                 return redirect(url_for('index'))
-#             else:
-#                 return render_template('login.html')
-#         else:
-#             session['login_ok'] = False
-#             return redirect(url_for('index'))
-#     else:
-#         email = request.form['email']
-#         passwd = request.form['pass']
-#         sifrelenmis = hashlib.sha256(passwd.encode("utf8")).hexdigest()
-#         if User.query.filter_by(email=email, passwd=sifrelenmis).first():
-#             veri = User.query.filter_by(
-#                 email=email, passwd=sifrelenmis).first()
-#             session['login_ok'] = True
-#             session['isim'] = veri.name
-#             session['id'] = veri.id
-#             session['auth'] = veri.auth
-#             session['sepet'] = carts
-#             return redirect(url_for('index'))
-#         else:
-#             return redirect(url_for('index'))
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     # 正常登录
@@ -130,15 +102,12 @@ def login():
         # print("pas="+str(pas))
         pas = hashlib.sha256(str(pas).encode("utf-8")).hexdigest()
         # print(em, pas)
-        cur = conn.cursor()
-        cur.execute("select * from user where email={email} and passwd= '{passwd}'"
-                    .format(email=em, passwd=pas))
-        ans = cur.fetchall()
-        if len(ans):
+        if User.query.filter_by(email=em, passwd=pas).first():
+            user = User.query.filter_by(email=em, passwd=pas).first()
             session['login_ok'] = True
-            session['isim'] = ans[0][1]
-            session['id'] = ans[0][0]
-            session['auth'] = enc(ans[0][4])
+            session['isim'] = user.name
+            session['id'] = user.id
+            session['auth'] = enc(user.auth)
             session['sepet'] = carts
             return redirect(url_for('index2'))
         else:
@@ -370,8 +339,8 @@ def catege(cateid):
 @app.route('/finalpro', methods=['GET', 'POST'])
 def finp():
     if 'login_ok' in session:
-        if(session['login_ok'] == True):
-            return render_template('final.html', curtime = time.time())
+        if(session['login_ok'] == True and dec(session['auth'])=='1'):
+            return render_template('final.html')
         else:
             return redirect(url_for('index'))
     else:
@@ -383,8 +352,7 @@ def finp():
 def fin():
     if 'login_ok' in session:
         if(session['login_ok'] == True):
-            ans = request.args.get('Time') if request.args.get('Time') else "0"
-            if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
+            if int(time.time()) < int('1640966400'): # 2022.1.1 00:00:00
                 return render_template('lost.html')
             else:
                 return render_template('flag.html')

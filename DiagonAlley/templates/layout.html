@@ -54,9 +54,7 @@
 					<ul>
 					{% if session['login_ok'] %}
 						<li><a href="/logout">退出登录</a></li>
-						{% if session['auth']=='yF\x1a\xee\xa5\xdbG\xe2\xf77\xac\xe8\x01\x13sm' %}
 						<li><a href="/finalpro">抢购商品</a></li>
-						{%endif%}
 						<li><a href="/histo">历史订单</a></li>
 						<li>{{session["isim"]}}</li>
 					{% else %}
