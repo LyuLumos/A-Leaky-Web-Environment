@@ -39,7 +39,7 @@ file.close()
 # Get the secret key
 
 # In Linux, run 
-#   'strings pngname | tail -1 | base32 -d'
+#   'strings pngname | tail -n 1 | base32 -d'
 # In Windows, run following code
 
 fileData = open('target.png','rb')
