@@ -2,6 +2,7 @@
 
 - [FixIt 技术总结报告](#fixit-技术总结报告)
   - [Diff](#diff)
+  - [Patch](#patch)
   - [修复思路和流程](#修复思路和流程)
     - [sql注入修复](#sql注入修复)
     - [Session伪造提权](#session伪造提权)
@@ -14,9 +15,20 @@
 下面是漏洞环境和修复环境的[diff结果](diff.patch)，后面我们会逐段说明。
 
 ```bash
-root@LAPTOP-AH86KF83:/mnt/d/GitHub# 
-diff -ruN A-Leaky-Web-Environment/DiagonAlley/ fixed/A-Leaky-Web-Environment/DiagonAlley/ > diff.patch
+root@LAPTOP-AH86KF83:/mnt/d/GitHub# diff -ruN A-Leaky-Web-Environment/DiagonAlley/ fixed/A-Leaky-Web-Environment/DiagonAlley/ > diff.patch
 ```
+
+## Patch
+
+```bash
+root@LAPTOP-AH86KF83:/mnt/d/GitHub# patch -p1 < diff.patch
+# patching file A-Leaky-Web-Environment/DiagonAlley/app.py
+# patching file A-Leaky-Web-Environment/DiagonAlley/encdec.py
+# patching file A-Leaky-Web-Environment/DiagonAlley/templates/final.html
+# patching file A-Leaky-Web-Environment/DiagonAlley/templates/layout.html
+```
+
+进行完补丁操作后可以发现两个文件夹就一样了。
 
 
 ## 修复思路和流程

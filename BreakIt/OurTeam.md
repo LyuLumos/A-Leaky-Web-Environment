@@ -104,3 +104,7 @@ http://106.14.163.104/finalbuy?Time=1626684024
 ![](../doc_img/flag.PNG)
 
 
+
+以上的这些操作，等价于我们的exp程序运行。
+
+![](../DiagonAlley/img/exp.png)
