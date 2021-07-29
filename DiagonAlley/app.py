@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_session import Session # Fix
+from flask_session import Session
 from sqlalchemy import desc
 import hashlib
 import time
@@ -13,7 +13,6 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Session(app)
 
 db = SQLAlchemy(app)
 
@@ -89,34 +88,6 @@ def lost():
         if(session['login_ok'] == True):
             return render_template('lost.html')
     return redirect(url_for('index'))
-
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'GET':
-#         if 'login_ok' in session:
-#             if session['login_ok'] == True:
-#                 return redirect(url_for('index'))
-#             else:
-#                 return render_template('login.html')
-#         else:
-#             session['login_ok'] = False
-#             return redirect(url_for('index'))
-#     else:
-#         email = request.form['email']
-#         passwd = request.form['pass']
-#         sifrelenmis = hashlib.sha256(passwd.encode("utf8")).hexdigest()
-#         if User.query.filter_by(email=email, passwd=sifrelenmis).first():
-#             veri = User.query.filter_by(
-#                 email=email, passwd=sifrelenmis).first()
-#             session['login_ok'] = True
-#             session['isim'] = veri.name
-#             session['id'] = veri.id
-#             session['auth'] = veri.auth
-#             session['sepet'] = carts
-#             return redirect(url_for('index'))
-#         else:
-#             return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -371,7 +342,7 @@ def catege(cateid):
 @app.route('/finalpro', methods=['GET', 'POST'])
 def finp():
     if 'login_ok' in session:
-        if(session['login_ok'] == True):
+        if(session['login_ok'] == True and str(session['auth']) == '1'):
             return render_template('final.html')
         else:
             return redirect(url_for('index'))
@@ -383,9 +354,8 @@ def finp():
 @app.route('/finalbuy', methods=['GET', 'POST'])
 def fin():
     if 'login_ok' in session:
-        if(session['login_ok'] == True):
+        if(session['login_ok'] == True and str(session['auth']) == '1'):
             ans = request.args.get('Time') if request.args.get('Time') else "0"
-            # print("ans = "+ ans)
             if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
                 return render_template('lost.html')
             else:

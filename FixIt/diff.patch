@@ -1,0 +1,117 @@
+diff -ruN A-Leaky-Web-Environment/DiagonAlley/app.py fixed/A-Leaky-Web-Environment/DiagonAlley/app.py
+--- A-Leaky-Web-Environment/DiagonAlley/app.py  2021-07-28 18:34:37.988993300 +0800
++++ fixed/A-Leaky-Web-Environment/DiagonAlley/app.py    2021-07-28 18:38:32.135901100 +0800
+@@ -5,7 +5,7 @@
+ from sqlalchemy import desc
+ import hashlib
+ import time
+-
++from encdec import enc, dec
+
+ app = Flask(__name__)
+ app.config['SECRET_KEY'] = 'TH15_15_N0T_F14G!'
+@@ -102,15 +102,12 @@
+         # print("pas="+str(pas))
+         pas = hashlib.sha256(str(pas).encode("utf-8")).hexdigest()
+         # print(em, pas)
+-        cur = conn.cursor()
+-        cur.execute("select * from user where email={email} and passwd= '{passwd}'"
+-                    .format(email=em, passwd=pas))
+-        ans = cur.fetchall()
+-        if len(ans):
++        if User.query.filter_by(email=em, passwd=pas).first():
++            user = User.query.filter_by(email=em, passwd=pas).first()
+             session['login_ok'] = True
+-            session['isim'] = ans[0][1]
+-            session['id'] = ans[0][0]
+-            session['auth'] = ans[0][4]
++            session['isim'] = user.name
++            session['id'] = user.id
++            session['auth'] = enc(user.auth)
+             session['sepet'] = carts
+             return redirect(url_for('index2'))
+         else:
+@@ -342,7 +339,7 @@
+ @app.route('/finalpro', methods=['GET', 'POST'])
+ def finp():
+     if 'login_ok' in session:
+-        if(session['login_ok'] == True and str(session['auth']) == '1'):
++        if(session['login_ok'] == True and dec(session['auth'])=='1'):
+             return render_template('final.html')
+         else:
+             return redirect(url_for('index'))
+@@ -354,9 +351,8 @@
+ @app.route('/finalbuy', methods=['GET', 'POST'])
+ def fin():
+     if 'login_ok' in session:
+-        if(session['login_ok'] == True and str(session['auth']) == '1'):
+-            ans = request.args.get('Time') if request.args.get('Time') else "0"
+-            if int(ans) < int('1640966400'): # 2022.1.1 00:00:00
++        if(session['login_ok'] == True and dec(session['auth'])=='1'):
++            if int(time.time()) < int('1640966400'): # 2022.1.1 00:00:00
+                 return render_template('lost.html')
+             else:
+                 return render_template('flag.html')
+Binary files A-Leaky-Web-Environment/DiagonAlley/database.db and fixed/A-Leaky-Web-Environment/DiagonAlley/database.db differ
+diff -ruN A-Leaky-Web-Environment/DiagonAlley/encdec.py fixed/A-Leaky-Web-Environment/DiagonAlley/encdec.py
+--- A-Leaky-Web-Environment/DiagonAlley/encdec.py       1970-01-01 08:00:00.000000000 +0800
++++ fixed/A-Leaky-Web-Environment/DiagonAlley/encdec.py 2021-07-28 17:03:32.464765900 +0800
+@@ -0,0 +1,30 @@
++# -*- coding: utf-8 -*-
++from Crypto.Cipher import AES
++from Crypto.Util.Padding import pad
++from Crypto.Util.Padding import unpad
++import os
++import string
++import random
++
++
++m = "1"
++key = ''.join(random.sample(string.ascii_letters + string.digits, 16))
++iv =  ''.join(random.sample(string.ascii_letters + string.digits, 16))
++
++key, iv = key.encode('utf-8'), iv.encode('utf-8')
++def enc(m):
++    m=str(m)
++    cipher = AES.new(key, AES.MODE_CBC, iv)
++    padtext = pad(m.encode('utf-8'),16,style='pkcs7')
++    return cipher.encrypt(padtext)
++
++def dec(c):
++    decrypter = AES.new(key, AES.MODE_CBC, iv)
++    plaintext = decrypter.decrypt(c)
++    plaintext = unpad(plaintext,16,style='pkcs7')
++    return plaintext.decode('utf-8')
++
++# print(enc(m))
++# print(dec(enc(1)))
++# print(dec(enc("1")))
++# print(type(True), type(False))
+\ No newline at end of file
+Binary files A-Leaky-Web-Environment/DiagonAlley/img/UML类图.png and fixed/A-Leaky-Web-Environment/DiagonAlley/img/UML类图.png differ
+Binary files A-Leaky-Web-Environment/DiagonAlley/img/gantt-chart.png and fixed/A-Leaky-Web-Environment/DiagonAlley/img/gantt-chart.png differ
+diff -ruN A-Leaky-Web-Environment/DiagonAlley/templates/final.html fixed/A-Leaky-Web-Environment/DiagonAlley/templates/final.html
+--- A-Leaky-Web-Environment/DiagonAlley/templates/final.html    2021-07-27 21:05:47.905934500 +0800
++++ fixed/A-Leaky-Web-Environment/DiagonAlley/templates/final.html      2021-07-28 17:03:32.471765600 +0800
+@@ -54,7 +54,7 @@
+                                                        <div class="product_buttons">
+                                                                <div class="text-right d-flex flex-row align-items-start justify-content-start" >
+                                                                        <div class="product_button product_cart text-center d-flex flex-column align-items-center justify-content-center" style="border-left:solid 1px #ededed">
+-                                                                               <div><div><a href="/finalbuy?Time=1626684024"><img src="{{ url_for('static',filename='images/cart.svg') }}" class="svg" alt=""></a></div></div>
++                                                                               <div><div><a href="/finalbuy"><img src="{{ url_for('static',filename='images/cart.svg') }}" class="svg" alt=""></a></div></div>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+diff -ruN A-Leaky-Web-Environment/DiagonAlley/templates/layout.html fixed/A-Leaky-Web-Environment/DiagonAlley/templates/layout.html
+--- A-Leaky-Web-Environment/DiagonAlley/templates/layout.html   2021-07-27 21:05:47.908942000 +0800
++++ fixed/A-Leaky-Web-Environment/DiagonAlley/templates/layout.html     2021-07-28 17:03:32.472764900 +0800
+@@ -54,9 +54,7 @@
+                                        <ul>
+                                        {% if session['login_ok'] %}
+                                                <li><a href="/logout">退出登录</a></li>
+-                                               {% if session['auth']==1 %}
+                                                <li><a href="/finalpro">抢购商品</a></li>
+-                                               {%endif%}
+                                                <li><a href="/histo">历史订单</a></li>
+                                                <li>{{session["isim"]}}</li>
+                                        {% else %}
