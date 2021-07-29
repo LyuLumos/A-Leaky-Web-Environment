@@ -2,3 +2,5 @@ pysqlite3
 flask
 flask-session
 flask_sqlalchemy
+gunicorn
+gevent

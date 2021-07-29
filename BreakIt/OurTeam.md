@@ -7,8 +7,8 @@ exp脚本请参见 [链接](EXP/exp.py)。我们这里仅说明如何进行手�
 我们推荐使用我们已开发好的docker环境进行搭建。
 
 ```bash
-$ docker pull registry.cn-hangzhou.aliyuncs.com/lyulumos/diagonalley:0.1
-$ docker run -it --rm -p 80:80 registry.cn-hangzhou.aliyuncs.com/lyulumos/diagonalley:0.1
+$ docker pull registry.cn-hangzhou.aliyuncs.com/lyulumos/diagonalley:0.2
+$ docker run -it --rm -p 80:80 registry.cn-hangzhou.aliyuncs.com/lyulumos/diagonalley:0.2
 ```
 
 当然也可以直接从源代码运行。
@@ -45,7 +45,7 @@ login?Email=1 or 1=1 or 1=1
 
 ![](../doc_img/main-page-footer.PNG)
 
-**提示2：活点地图（即第一个图片本身）**
+**提示2：活点地图（即第一个图片）**
 
 我们下载这张图片，会发现图片的最后是嵌入了一句编码的，观察可以发现其实是base32编码。
 

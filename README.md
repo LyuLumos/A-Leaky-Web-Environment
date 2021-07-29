@@ -20,6 +20,8 @@
 ├── DiagonAlley
 │   ├── app.py            # flask后端（漏洞环境）
 │   ├── database.db       # 数据库
+│   ├── dockerfile        # docker配置文件
+│   ├── gunicorn.conf.py  # gunicorn配置文件
 │   ├── img/              # 网站所用的图片
 │   ├── requirements.txt  # 运行所需环境
 │   ├── static/           # 静态文件
