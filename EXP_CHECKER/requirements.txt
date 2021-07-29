@@ -1,3 +1,0 @@
-lxml
-pybase64
-requests

@@ -351,7 +351,7 @@ def finp():
 @app.route('/finalbuy', methods=['GET', 'POST'])
 def fin():
     if 'login_ok' in session:
-        if(session['login_ok'] == True):
+        if(session['login_ok'] == True and dec(session['auth'])=='1'):
             if int(time.time()) < int('1640966400'): # 2022.1.1 00:00:00
                 return render_template('lost.html')
             else:
