@@ -12,12 +12,13 @@
 ```bash
 .(main)
 ├── BreakIt
-│   ├── EXP/              # exp代码和所需环境
 │   ├── Others.md         # 其他部分漏洞环境的总结
 │   ├── OurTeam.md        # DiagonAlley环境的官方Writeup (￣y▽,￣)╭ 
 │   ├── imgs/             # 文档所用的图片
 │   └── teamWDX.md        # 攻击其他组的一个wp
 ├── DiagonAlley
+│   ├── CHECKER/          # checker脚本代码和所需环境
+│   ├── EXP/              # exp代码和所需环境
 │   ├── app.py            # flask后端（漏洞环境）
 │   ├── database.db       # 数据库
 │   ├── dockerfile        # docker配置文件
@@ -27,7 +28,6 @@
 │   ├── static/           # 静态文件
 │   └── templates/        # html文件
 ├── FixIt                 
-│   ├── CHECKER/          # checker脚本代码和所需环境
 │   ├── README.md         # 修复阶段总结
 │   └── diff.patch        # 修复补丁
 ├── README.md

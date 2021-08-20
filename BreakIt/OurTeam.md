@@ -77,7 +77,7 @@ $ strings Marauders_Map_Scaled_large.png | tail -n 1 | base32 -d
 
 我们的目的是要提权，即将 `auth` 的值改为 1。
 
-这里要额外注意，由于编解码所用的js语言和python语言对 `True` 和 `true` 的写法不同，所以需要进行大小写替换，这也是提示1所写的第一句的目的。
+这里要额外注意，由于 `Json` 里定义的「字面值」只有全小写的 `false`  `true` ，而 `True` 和 `False` 是 `Python` 里特有的布尔类型「字面值」，所以需要进行大小写替换，这也是提示1所写的第一句的目的。
 
 将伪造完的session传入，会发现用户名旁边出现了新的 `抢购商品` 按钮。
 
